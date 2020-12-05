@@ -5,13 +5,16 @@ import re
 fields = ["byr:", "iyr:", "eyr:", "hgt:", "hcl:", "ecl:", "pid:"]
 eyeColors = ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
 
-def getPattern(field):
-    return field + '([#\d\w]+)\s'
+def getValue(passport, field):
+    pattern = field + '([#\d\w]+)\s'
+    captureGroups = re.search(pattern, passport)
+    return captureGroups.group(1)
 
 def validateField(passport, field):
-    pattern = getPattern(field)
-    captureGroups = re.search(pattern, passport)
-    value = captureGroups.group(1)
+    if not field in passport:
+        return False
+
+    value = getValue(passport, field)
 
     if field == "byr:":
         value = int(value)
@@ -44,12 +47,7 @@ def validateField(passport, field):
 
 def validatePassport(passport):
     for field in fields:
-        if not field in passport:
-            return False
         if not validateField(passport, field):
-            pattern = getPattern(field)
-            captureGroups = re.search(pattern, passport)
-            value = captureGroups.group(1)
             return False
 
     return True
@@ -64,7 +62,6 @@ def getValidPassportCountFromPassports(passports):
 
 def getPassportsFromData(data):
     tokens = data.split("\n\n")
-    passports = []
     for passport in tokens:
         passport = passport.replace("\n", " ")
         passport = passport + " "
@@ -76,3 +73,5 @@ with open('input.txt') as file:
     data = file.read()
     passports = getPassportsFromData(data)
     print(getValidPassportCountFromPassports(passports))
+
+
