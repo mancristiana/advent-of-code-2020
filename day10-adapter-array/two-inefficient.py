@@ -1,23 +1,30 @@
-allArrangements = []
 
-def getArrangements(numbers):
-    numbersString = str(numbers)
-    if numbersString not in allArrangements:
-        allArrangements.append(numbersString)
-    else:
-        return
+def main():
+    adapters = [1, 2, 3, 4]
+    adapters.sort()
+    print(solve(adapters))
 
-    length = len(numbers)
-    for index in range(1, length - 1):
-        if (numbers[index + 1] - numbers[index - 1] <= 3):
-            getArrangements(numbers[:index] + numbers[index + 1:])
+def solve(adapters):
+    adapters = [0] + adapters[:] + [adapters[-1] + 3]
+    return getArrangements(adapters, 1)
 
-# with open('example.txt') as file:
-with open('input.txt') as file:
-    data = file.read().split("\n")
-    numbers = [int(number) for number in data]
-    numbers.sort()
-    
-    numbers = [0] + numbers[:]
-    getArrangements(numbers)
-    print(len(allArrangements))
+def getArrangements(adapters, startIndex):
+    print(adapters)
+    length = len(adapters)
+    if (length <= 3):
+        return 1
+    sum = 1
+    for index in range(startIndex, length - 1):
+        if (adapters[index + 1] - adapters[index - 1] <= 3):
+            sum += getArrangements(adapters[:index] + adapters[index + 1:], index)
+    return sum
+
+main()
+
+
+
+
+
+
+
+

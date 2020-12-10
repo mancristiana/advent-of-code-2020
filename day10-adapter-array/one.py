@@ -1,9 +1,11 @@
 
-with open('input.txt') as file:
-    data = file.read().split("\n")
-    numbers = [int(number) for number in data]
+def main():
+    with open('input.txt') as file:
+        numbers = [int(line.rstrip()) for line in file.readlines()]
     numbers.sort()
+    print(solve(numbers))
 
+def solve(numbers):
     diffOfOne = 0
     diffOfThree = 1
     prevNumber = 0
@@ -16,4 +18,6 @@ with open('input.txt') as file:
         
         prevNumber = number
 
-    print(diffOfThree * diffOfOne)
+    return diffOfOne * diffOfThree
+
+main()
